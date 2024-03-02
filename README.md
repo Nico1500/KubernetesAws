@@ -1,5 +1,5 @@
 # Kubernetes on AWS
-![image](https://github.com/Nico1500/Kubernetes_Aws/assets/63806892/e023dcb9-fe1e-4c23-b920-8db9fc893bbc)
+![image](https://github.com/Nico1500/KubernetesAws/assets/63806892/b2a41a9e-f429-483a-bb56-10fd55aa92d2)
 
 This project demonstrates the deployment of a microservices application on AWS using Kubernetes. The application consists of three main components:
 
