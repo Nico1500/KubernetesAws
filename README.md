@@ -1,55 +1,53 @@
-# Kubernetes_Aws
+# Kubernetes on AWS
 ![image](https://github.com/Nico1500/Kubernetes_Aws/assets/63806892/e023dcb9-fe1e-4c23-b920-8db9fc893bbc)
 
-Ce projet illustre le déploiement d'une application microservice sur AWS en utilisant Kubernetes. L'application se compose de trois principaux composants :
+This project demonstrates the deployment of a microservices application on AWS using Kubernetes. The application consists of three main components:
 
-- **API Utilisateur** : Gère les utilisateurs.
-- **API Tâches** : Gère les tâches.
-- **API Authentification** : Gère l'authentification des utilisateurs. Pour des raisons de sécurité, cette API est uniquement accessible via une Cluster IP.
+- **User API**: Manages users.
+- **Task API**: Manages tasks.
+- **Authentication API**: Handles user authentication. For security reasons, this API is only accessible via a Cluster IP.
 
-L'API Utilisateur est configurée pour utiliser un volume persistant AWS EFS CSI, pour la persistance des données des utilisateurs.
+The User API is configured to use an AWS EFS CSI persistent volume for user data persistence.
 
-## Configuration sur AWS
+## Configuration on AWS
 
-Pour déployer ce projet sur AWS, j'ai pu tester ces étapes :
+To deploy this project on AWS, I followed these steps:
 
-### 1. Configuration du Cluster avec VPC
+### 1. Cluster Configuration with VPC
 
-- **Configuration du Cluster Public et Privé** : Configurer un VPC (Virtual Private Cloud) pour isoler votre cluster Kubernetes dans un réseau virtuel sur AWS.
+- **Public and Private Cluster Configuration**: Set up a VPC (Virtual Private Cloud) to isolate your Kubernetes cluster in a virtual network on AWS.
+- **VPC Roles Creation**: Create the necessary IAM roles to allow the EKS cluster to interact with other AWS services.
 
-- **Création des Rôles de VPC** : Faire les rôles IAM nécessaires pour permettre au cluster EKS d'interagir avec les autres services AWS.
+### 2. Connecting to AWS
 
-### 2. Connexion à AWS
-
-- **Connexion via un Terminal** : Utiliser l'AWS CLI pour connecter mon compte AWS. Configurer la région AWS pour déployer le cluster EKS.
+- **Connection via Terminal**: Use the AWS CLI to connect my AWS account. Configure the AWS region to deploy the EKS cluster.
 
   ```
   aws configure
   ```
 
-### 3. Configuration des Nodes
+### 3. Nodes Configuration
 
-- **Configurer une Node** : Spécifier les spécifications des machines (les instances EC2) et les options de scaling pour mes nodes.
+- **Node Configuration**: Specify the machine specifications (EC2 instances) and scaling options for my nodes.
+- **Node Roles Creation**: Create the necessary IAM roles for the nodes to access AWS resources.
 
-- **Création des Rôles des Nodes** : Créer les rôles IAM nécessaires pour les nodes, pour les accès aux ressources AWS.
+### 4. Kubernetes Deployment
 
-### 4. Déploiement Kubernetes
-
-- **Application des Fichiers YAML** : Appliquer mes fichiers YAML Kubernetes pour configurer les nodes, déployer mes pods, et créer mes services. AWS a configuré automatiquement les Load Balancers pour exposer mes services avec des URLs accessibles.
+- **Applying YAML Files**: Apply my Kubernetes YAML files to configure the nodes, deploy my pods, and create my services. AWS automatically configured the Load Balancers to expose my services with accessible URLs.
 
   ```
-  kubectl apply -f <fichier>.yaml
+  kubectl apply -f <file>.yaml
   ```
 
-### 5. Configuration de Sécurité des fichiers
+### 5. Security Configuration
 
-- **Création d'un Groupe de Sécurité** : j'ai fait un groupe de sécurité avec une règle NFS sur le VPC pour sécuriser l'accès au cluster et permettre au VPC de gérer le systeme de fichier réseau.
+- **Security Group Creation**: I created a security group with an NFS rule on the VPC to secure access to the cluster and allow the VPC to manage the network file system.
 
-### 6. Volumes Persistants avec AWS CSI
+### 6. Persistent Volumes with AWS CSI
 
-- **Ajout des Volumes Persistants AWS CSI** : j'ai utilisé le CSI d'AWS pour créer des volumes persistants qui fonctionnent de manière similaire aux volumes Docker, mais avec une intégration native à AWS.
+- **Adding AWS CSI Persistent Volumes**: I used AWS's CSI to create persistent volumes that function similarly to Docker volumes but with native integration into AWS.
 
-### 7. Système de Fichiers sur le VPC
+### 7. File System on the VPC
 
-- **Création d'un Système de Fichiers** : Créer un système de fichiers EFS sur le VPC pour qu'il soit accessible par les pods dans le même réseau.
-- **Liaison du Système de Fichiers aux Régions** : Verifier que le système de fichiers est disponible dans les deux zones de disponibilité pour que les API utilise les mêmes données.
+- **File System Creation**: Create an EFS file system on the VPC so it's accessible by pods within the same network.
+- **File System Linking to Regions**: Ensure the file system is available in both availability zones so the APIs can use the same data.
